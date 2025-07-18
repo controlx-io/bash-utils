@@ -11,7 +11,7 @@
 # --- Configuration ---
 # The URL to the raw pm2alt script on GitHub.
 # IMPORTANT: Replace this with your actual raw GitHub URL.
-SCRIPT_URL="https://raw.githubusercontent.com/user/repo/main/pm2alt"
+SCRIPT_URL="https://raw.githubusercontent.com/controlx-io/bash-utils/refs/heads/main/pm2alt.sh"
 INSTALL_PATH="/usr/local/bin/pm2alt"
 
 # --- Color Definitions ---
