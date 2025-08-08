@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # pm2alt - A simple pm2-like wrapper for systemd
-# v3: Allows 'status' and 'log' to be run without sudo.
+# v3: Allows 'status' and 'logs' to be run without sudo.
 # ==============================================================================
 
 # --- Color Definitions ---
@@ -25,7 +25,7 @@ function usage() {
     echo -e "  ${C_GREEN}stop${C_RESET}     (sudo) Stop and disable an application service."
     echo -e "  ${C_GREEN}restart${C_RESET}  (sudo) Restart an application service."
     echo -e "  ${C_GREEN}status${C_RESET}   Display the status of a service."
-    echo -e "  ${C_GREEN}log${C_RESET}     View the live logs of a service."
+    echo -e "  ${C_GREEN}logs${C_RESET}     View the live logs of a service."
     echo
     echo -e "${C_YELLOW}EXAMPLE:${C_RESET}"
     echo "  sudo pm2alt start -n my-api -s \"deno run --allow-net main.ts\" -u username -w /home/username/my-api"
@@ -42,7 +42,7 @@ case "$COMMAND" in
         systemctl status "${SERVICE_NAME}.service" --no-pager
         exit 0
         ;;
-    log)
+    logs)
         SERVICE_NAME="$2"
         if [ -z "$SERVICE_NAME" ]; then echo -e "${C_RED}Error: Service name is required.${C_RESET}"; usage; fi
         journalctl -u "${SERVICE_NAME}.service" -f
@@ -132,31 +132,6 @@ EOF
 
         systemctl stop "${SERVICE_NAME}.service"
         systemctl disable "${SERVICE_NAME}.service"
-
-        SERVICE_FILE_PATH="/etc/systemd/system/${SERVICE_NAME}.service"
-        if [ -f "$SERVICE_FILE_PATH" ]; then
-            read -p "Do you want to delete the service file? [y/N]: " confirm
-            if [[ "$confirm" =~ ^[yY](es)?$ ]]; then
-                rm "$SERVICE_FILE_PATH"
-                systemctl daemon-reload
-                echo "Service file deleted."
-            fi
-        fi
-        echo -e "${C_GREEN}✔ Service '${SERVICE_NAME}' has been stopped and disabled.${C_RESET}"
-        ;;
-
-    restart)
-        SERVICE_NAME="$1"
-        if [ -z "$SERVICE_NAME" ]; then echo -e "${C_RED}Error: Service name is required.${C_RESET}"; usage; fi
-        systemctl restart "${SERVICE_NAME}.service"
-        echo -e "${C_GREEN}✔ Service restarted.${C_RESET}"
-        systemctl status "${SERVICE_NAME}.service" --no-pager
-        ;;
-
-    *)
-        usage
-        ;;
-esac
 
         SERVICE_FILE_PATH="/etc/systemd/system/${SERVICE_NAME}.service"
         if [ -f "$SERVICE_FILE_PATH" ]; then
