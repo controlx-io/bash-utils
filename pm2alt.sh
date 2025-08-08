@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # pm2alt - A simple pm2-like wrapper for systemd
-# v3: Allows 'status' and 'logs' to be run without sudo.
+# v4: Changed 'logs' to 'log'
 # ==============================================================================
 
 # --- Color Definitions ---
@@ -25,7 +25,7 @@ function usage() {
     echo -e "  ${C_GREEN}stop${C_RESET}     (sudo) Stop and disable an application service."
     echo -e "  ${C_GREEN}restart${C_RESET}  (sudo) Restart an application service."
     echo -e "  ${C_GREEN}status${C_RESET}   Display the status of a service."
-    echo -e "  ${C_GREEN}logs${C_RESET}     View the live logs of a service."
+    echo -e "  ${C_GREEN}log${C_RESET}     View the live logs of a service."
     echo
     echo -e "${C_YELLOW}EXAMPLE:${C_RESET}"
     echo "  sudo pm2alt start -n my-api -s \"deno run --allow-net main.ts\" -u username -w /home/username/my-api"
@@ -42,7 +42,7 @@ case "$COMMAND" in
         systemctl status "${SERVICE_NAME}.service" --no-pager
         exit 0
         ;;
-    logs)
+    log)
         SERVICE_NAME="$2"
         if [ -z "$SERVICE_NAME" ]; then echo -e "${C_RED}Error: Service name is required.${C_RESET}"; usage; fi
         journalctl -u "${SERVICE_NAME}.service" -f
@@ -100,7 +100,6 @@ case "$COMMAND" in
 [Unit]
 Description=${SERVICE_NAME} - Managed by pm2alt
 After=network.target
-
 [Service]
 User=${RUN_USER}
 Group=${RUN_USER}
@@ -111,7 +110,6 @@ RestartSec=10s
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=${SERVICE_NAME}
-
 [Install]
 WantedBy=multi-user.target
 EOF
