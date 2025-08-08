@@ -56,4 +56,4 @@ echo -e "${C_YELLOW}sudo pm2alt start -n my-app -s \"deno run --allow-all main.t
 echo -e "${C_YELLOW}sudo pm2alt stop my-app${C_RESET}"
 echo -e "${C_YELLOW}sudo pm2alt restart my-app${C_RESET}"
 echo -e "${C_YELLOW}pm2alt status my-app${C_RESET}"
-echo -e "${C_YELLOW}pm2alt logs my-app${C_RESET}"
+echo -e "${C_YELLOW}pm2alt log my-app${C_RESET}"
