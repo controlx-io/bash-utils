@@ -49,7 +49,7 @@ sudo pm2alt start -n <app-name> -s "<command>" [options]
 **Example (Deno):**
 
 ```bash
-sudo pm2alt start -n my-deno-app -s "/home/nodeapp/.deno/bin/deno run --allow-net server.ts" -u nodeapp -w /home/nodeapp/my-project
+sudo pm2alt start -n my-deno-app -s "deno run --allow-net server.ts" -u username -w /home/username/my-project
 # as above, if the deno binary is not in the PATH of the current user, you can specify the full path to the deno executable
 ```
 
@@ -64,12 +64,7 @@ sudo pm2alt start -n my-node-app -s "node index.js" -u www-data -w /var/www/my-a
 To see the status of a specific service, including whether it's active, its PID, and recent logs:
 
 ```bash
-sudo pm2alt status my-deno-app
-```
-
-To see the status of all `systemd` services, run it without a name:
-```bash
-sudo pm2alt status
+pm2alt status my-deno-app
 ```
 
 ### Viewing Logs
@@ -77,7 +72,7 @@ sudo pm2alt status
 To view the live logs for an application (similar to `pm2 logs`):
 
 ```bash
-sudo pm2alt logs my-deno-app
+pm2alt logs my-deno-app
 ```
 (Press `Ctrl+C` to exit the log stream).
 
@@ -110,3 +105,15 @@ The `pm2alt` script is a wrapper that constructs and manages `systemd` unit file
 -   Logs are automatically handled by `journald`, which is the standard `systemd` logging daemon.
 
 This approach gives you the simplicity of `pm2` while using the robust, native process management tools of your operating system.
+
+
+## Updating
+To update `pm2alt`, delete the existing one and run the installation command again.
+```bash
+sudo pm2alt stop my-deno-app
+# Do you want to delete the service file? [y/N]:, make sure to type y
+
+# install it again
+curl -sL https://raw.githubusercontent.com/controlx-io/bash-utils/refs/heads/main/pm2alt_install.sh | sudo -E bash -
+sudo pm2alt start -n my-deno-app -s "deno run --allow-net server.ts" -u username -w /home/username/my-project
+```
